@@ -4,6 +4,7 @@ import theano.tensor as T
 import cPickle as pkl
 import io
 
+from .pol_loc_tweets import parse_politician_location_tweet_file, RetweetDetector
 from .t2v import tweet2vec, load_params
 
 
@@ -35,6 +36,24 @@ def prepare_data(input_file, max_len, preprocessor=lambda txt: txt):
             Xc = preprocessor(line.rstrip('\n'))
             Xt.append(Xc[:max_len])
     return Xt, None
+
+
+def prepare_data_pol_loc_file(input_file, max_len, retweet_cache=None, preprocessor=lambda data: data['token']):
+    if retweet_cache is None:
+        retweet_cache = RetweetDetector(cache_size_limit=1000000)
+    print("Preparing Data...")
+    meta = []
+    Xt = []
+    for data in parse_politician_location_tweet_file(filename=input_file, unquote_data=True):
+        # the line is split in separate fields:
+        # tweet_id	datetime	"politician"	"location"	"position_politician"	"position_location"	"tweet_text"
+        # "tweet_token"	data_file	"person_probs"  "location_probs"
+        if not retweet_cache.check_collision(data, append_to_cache=True):
+            # use preprocessor
+            Xc = preprocessor(data)
+            Xt.append(Xc[:max_len])
+            meta.append(data)
+    return Xt, meta
 
 
 def build_network(path, m_num=None, max_classes=6000):
