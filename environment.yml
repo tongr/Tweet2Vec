@@ -1,0 +1,9 @@
+name: tweet2vec
+channels:
+- conda-forge
+- defaults
+dependencies:
+- theano
+- lasagne
+- mkl-service
+- python=2.7

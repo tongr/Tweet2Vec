@@ -4,14 +4,23 @@ This repository provides a character-level encoder/trainer for social media post
 
 There are two models implemented in the paper - the character level _tweet2vec_ and a word level baseline. They can be found in their respective directories, with instructions on how to run. General information about prerequisites and data format can be found below.
 
-Prerequisites
-======================
-- Python 2.7
-- Theano and all dependencies (latest)
-- Lasagne (latest)
-- Numpy
-- Maybe more, just use `pip install` if you get an error
+## Prerequisites
+ * Conda: https://conda.io/docs/user-guide/install/index.html
 
+## Installation
+1. create  `tweet2vec`-conda environment
+   ```
+   conda env create -f environment.yml
+   ```
+1. activate `tweet2vec` environment
+   ```
+   source activate tweet2vec
+   ```
+1. try fixing lasagne issue: https://github.com/Theano/Theano/issues/4337
+   ```
+   ./fix_theano_issue_4337.sh
+   ```
+1. run code ...
 
 Data and Preprocessing
 =======================
